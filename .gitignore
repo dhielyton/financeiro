@@ -9,3 +9,6 @@
 *.props
 *.targets
 *.txt
+/Controle.Financeiro/Controle.Financeiro/obj/Debug/net8.0
+/Controle.Financeiro/Controle.Financeiro.Domain/obj/Debug/net8.0
+/Controle.Financeiro/Controle.Financeiro.Infrastructure/obj/Debug/net8.0
