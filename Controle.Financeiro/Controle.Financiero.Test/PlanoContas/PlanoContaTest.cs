@@ -14,7 +14,7 @@ namespace Controle.Financiero.Test.PlanoContas
         [Fact]
         public void CadastrarContaComSucesso()
         {
-            var conta = new Conta("1", "Receitas", Tipo.Receita, false);
+            var conta = new Conta("1", "Receitas", TipoConta.Receita, false);
             conta.Descricao.Should().NotBeNullOrEmpty();
             conta.Tipo.Should().Be(TipoConta.Receita);
             conta.AceitaLancamento.Should().BeFalse();
