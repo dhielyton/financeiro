@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controle.Financeiro.Infrast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controle.Financiero.Test", "Controle.Financiero.Test\Controle.Financiero.Test.csproj", "{4882DC98-49D0-46C8-84A9-308C30DB571A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controle.Financeiro.IntegrationTest", "Controle.Financeiro.IntegrationTest\Controle.Financeiro.IntegrationTest.csproj", "{FEE0C0CE-DFF6-4D56-9DF6-1BCAD83E629C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4882DC98-49D0-46C8-84A9-308C30DB571A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4882DC98-49D0-46C8-84A9-308C30DB571A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4882DC98-49D0-46C8-84A9-308C30DB571A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEE0C0CE-DFF6-4D56-9DF6-1BCAD83E629C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEE0C0CE-DFF6-4D56-9DF6-1BCAD83E629C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEE0C0CE-DFF6-4D56-9DF6-1BCAD83E629C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEE0C0CE-DFF6-4D56-9DF6-1BCAD83E629C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

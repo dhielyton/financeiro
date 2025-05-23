@@ -1,4 +1,5 @@
-﻿using Controle.Financeiro.Domain.PlanoContas.Exceptions;
+﻿using Controle.Financeiro.Domain.Kernel;
+using Controle.Financeiro.Domain.PlanoContas.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,18 +8,17 @@ using System.Threading.Tasks;
 
 namespace Controle.Financeiro.Domain.PlanoContas
 {
-    public class Conta
+    public class Conta: Entity
     {
         public Conta(string codigo, string descricao, TipoConta tipo, bool aceitaLancamento)
         {
-            Id = Guid.NewGuid().ToString();
+            GenerateId();
             Descricao = descricao;
             Codigo = codigo;
             Tipo = tipo;
             AceitaLancamento = aceitaLancamento;
         }
 
-        public string Id { get; private set; }
         public Conta ContaMaster { get; private set; }
         public string ContaMasterId { get; set; }
         public string Descricao { get; set; }
