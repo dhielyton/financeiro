@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Controle.Financeiro.Domain.PlanoContas.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Controle.Financeiro.Domain.PlanoContas
             AceitaLancamento = aceitaLancamento;
         }
 
-        public string Id { get; set; }
+        public string Id { get; private set; }
         public Conta ContaMaster { get; private set; }
         public string ContaMasterId { get; set; }
         public string Descricao { get; set; }

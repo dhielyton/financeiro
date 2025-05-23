@@ -30,6 +30,7 @@ namespace Controle.Financiero.Test.PlanoContas
             subconta.Tipo.Should().Be(TipoConta.Receita);
             subconta.AceitaLancamento.Should().BeTrue();
             subconta.ContaMaster.Should().NotBeNull();
+            subconta.ContaMasterId.Should().Be(conta.Id);
         }
 
         [Fact]
@@ -42,7 +43,7 @@ namespace Controle.Financiero.Test.PlanoContas
         }
 
         [Fact]
-        public void AdicionarContaFilhaUmaContaQueAceitaLancamentos()
+        public void AdicionarContaFilhaAUmaContaQueAceitaLancamentos()
         {
             var conta = new Conta("2.1.4", "Ferias", TipoConta.Despesa, true);
             var subconta = new Conta("2.1.2", "Salario", TipoConta.Despesa, true);
