@@ -32,7 +32,8 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
                 .IsRequired();
 
             builder.Property(c => c.ContaMasterId)
-                .HasMaxLength(36);
+                .HasMaxLength(36).IsRequired(false);
+
 
             builder.HasOne(c => c.ContaMaster)
                 .WithMany()

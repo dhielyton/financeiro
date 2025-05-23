@@ -21,7 +21,7 @@ namespace Controle.Financeiro.Infrastructure.Repositories
         public async Task<TEntity> Delete(TEntity entity)
         {
             
-            _dbSet.Update(entity);
+            _dbSet.Remove(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }
