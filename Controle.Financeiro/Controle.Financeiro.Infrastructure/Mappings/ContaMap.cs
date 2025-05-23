@@ -17,9 +17,12 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
                 .IsRequired()
                 .HasMaxLength(36);
 
-            builder.Property(c => c.Codigo)
+            builder.Property(c => c.CodigoExtenso)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            builder.Property(c => c.Codigo)
+                .IsRequired();
 
             builder.Property(c => c.Descricao)
                 .IsRequired()
