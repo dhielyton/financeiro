@@ -15,6 +15,11 @@ namespace Controle.Financeiro.Infrastructure.Repositories
         {
         }
 
+        public Task<List<Conta>> GetAll()
+        {
+            return _dbSet.OrderBy(x => x.CodigoExtenso).ToListAsync();
+        }
+
         public async Task<Conta> GetByCodigoExtenso(string codigoExtenso)
         {
             return await _dbSet.Include(x => x.ContaMaster).Where(x => x.CodigoExtenso == codigoExtenso).FirstOrDefaultAsync();
@@ -29,5 +34,7 @@ namespace Controle.Financeiro.Infrastructure.Repositories
                         .ToListAsync();
             return codigos.DefaultIfEmpty(0).Max();
         }
+
+
     }
 }

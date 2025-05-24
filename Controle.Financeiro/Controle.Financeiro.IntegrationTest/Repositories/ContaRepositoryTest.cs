@@ -95,5 +95,12 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
             var codigoMax = await _contaRepository.GetCodigoMaxGrupoConta(grupoConta);
             Assert.True(codigoMax == 0);
         }
+
+        [Fact]
+        public async Task ObterTodasContas()
+        {
+            var contas = await _contaRepository.GetAll();
+            Assert.NotEmpty(contas);
+        }
     }
 }
