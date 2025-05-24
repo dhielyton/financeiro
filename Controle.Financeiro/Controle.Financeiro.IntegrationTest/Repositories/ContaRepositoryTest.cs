@@ -17,7 +17,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         public ContaRepositoryTest()
         {
             var options = new DbContextOptionsBuilder<FinanceiroDbContext>()
-                .UseSqlServer("Server=DESKTOP-V7712Q7\\SQLEXPRESS;Database=financeiro;User Id=admin;Password=x9aold1988;TrustServerCertificate=True;")
+                .UseSqlServer("Server=DESKTOP-V7712Q7\\SQLEXPRESS;Database=financeiro;User Id=admin;Password=@admin;TrustServerCertificate=True;")
                 .Options;
 
            
@@ -28,7 +28,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         [Fact]
         public async Task IncluirConta()
         {
-            var conta = new Conta("1", "Receitas", TipoConta.Receita, false);
+            var conta = new Conta(1, "Receitas", TipoConta.Receita, false);
             var result = await _contaRepository.Insert(conta);
             Assert.NotNull(result);
         }
@@ -36,7 +36,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         [Fact]
         public async Task ObterConta()
         {
-            var conta = new Conta("1", "Receitas", TipoConta.Receita, false);
+            var conta = new Conta(1, "Receitas", TipoConta.Receita, false);
             await _contaRepository.Insert(conta);
             var result = await _contaRepository.Get(conta.Id);
             Assert.NotNull(result);
@@ -45,7 +45,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         [Fact]
         public async Task AlterarConta()
         {
-            var conta = new Conta("1", "Receitas", TipoConta.Receita, false);
+            var conta = new Conta(1, "Receitas", TipoConta.Receita, false);
             await _contaRepository.Insert(conta);
             conta.Descricao = "Ativo";
             var result = await _contaRepository.Update(conta);
@@ -55,7 +55,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         [Fact]
         public async Task ExcluirConta()
         {
-            var conta = new Conta("1", "Receitas", TipoConta.Receita, false);
+            var conta = new Conta(1, "Receitas", TipoConta.Receita, false);
             await _contaRepository.Insert(conta);
             var result = await _contaRepository.Delete(conta);
             result = await _contaRepository.Get(result.Id);

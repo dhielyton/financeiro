@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Controle.Financeiro.Infrastructure.Repositories
 {
-    public class ContaRepository:Repository<Conta>
+    public class ContaRepository : Repository<Conta>, IContaRepository
     {
         public ContaRepository(FinanceiroDbContext financeiroDbContext) : base(financeiroDbContext)
         {
         }
 
-        public DbSet<Conta> Contas { get; set; }
+        
     }
 }
