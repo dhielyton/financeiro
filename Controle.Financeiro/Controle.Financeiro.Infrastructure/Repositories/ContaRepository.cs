@@ -15,6 +15,11 @@ namespace Controle.Financeiro.Infrastructure.Repositories
         {
         }
 
-        
+        public async Task<Conta> GetByCodigoExtenso(string codigoExtenso)
+        {
+            return await _dbSet.Include(x => x.ContaMaster).Where(x => x.CodigoExtenso == codigoExtenso).FirstOrDefaultAsync();
+        }
+
+
     }
 }

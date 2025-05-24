@@ -26,7 +26,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         }
 
         [Fact]
-        public async Task IncluirConta()
+        public async Task IncluirContaNivel1()
         {
             var conta = new Conta(1, "Receitas", TipoConta.Receita, false);
             var result = await _contaRepository.Insert(conta);
@@ -34,11 +34,29 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         }
 
         [Fact]
-        public async Task ObterConta()
+        public async Task IncluirContaNivel2()
+        {
+            var contaMaster = await _contaRepository.GetByCodigoExtenso("1");
+            var conta = new Conta(1, "Taxa condominial", TipoConta.Receita, true);
+            conta.AddContarMaster(contaMaster);
+            var result = await _contaRepository.Insert(conta);
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ObterContaById()
         {
             var conta = new Conta(1, "Receitas", TipoConta.Receita, false);
             await _contaRepository.Insert(conta);
             var result = await _contaRepository.Get(conta.Id);
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ObterContaByCodigoExtenso()
+        {
+            
+            var result = await _contaRepository.GetByCodigoExtenso("1");
             Assert.NotNull(result);
         }
 
@@ -60,6 +78,12 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
             var result = await _contaRepository.Delete(conta);
             result = await _contaRepository.Get(result.Id);
             Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task ObterCodigoMaxGrupoConta() 
+        {
+            //var conta = _contaRepository.GetByCodigoExtenso()
         }
     }
 }
