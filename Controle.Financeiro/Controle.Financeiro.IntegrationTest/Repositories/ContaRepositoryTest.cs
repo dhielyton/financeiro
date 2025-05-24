@@ -37,7 +37,7 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         public async Task IncluirContaNivel2()
         {
             var contaMaster = await _contaRepository.GetByCodigoExtenso("1");
-            var conta = new Conta(1, "Taxa condominial", TipoConta.Receita, true);
+            var conta = new Conta(3, "Multas", TipoConta.Receita, true);
             conta.AddContarMaster(contaMaster);
             var result = await _contaRepository.Insert(conta);
             Assert.NotNull(result);
@@ -81,9 +81,19 @@ namespace Controle.Financeiro.IntegrationTest.Repositories
         }
 
         [Fact]
-        public async Task ObterCodigoMaxGrupoConta() 
+        public async Task ObterCodigoMaxGrupoContaMaiorQueZero() 
         {
-            //var conta = _contaRepository.GetByCodigoExtenso()
+            var grupoConta = await _contaRepository.GetByCodigoExtenso("1");
+            var codigoMax = await _contaRepository.GetCodigoMaxGrupoConta(grupoConta);
+            Assert.True(codigoMax == 3);
+        }
+
+        [Fact]
+        public async Task ObterCodigoMaxGrupoContaIgualAZero()
+        {
+            var grupoConta = await _contaRepository.GetByCodigoExtenso("1.3");
+            var codigoMax = await _contaRepository.GetCodigoMaxGrupoConta(grupoConta);
+            Assert.True(codigoMax == 0);
         }
     }
 }
