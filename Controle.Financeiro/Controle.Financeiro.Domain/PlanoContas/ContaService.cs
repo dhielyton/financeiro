@@ -15,7 +15,27 @@ namespace Controle.Financeiro.Domain.PlanoContas
             _contaRepository = contaRepository;
         }
 
-        public async Task<string> SugerirProximoCodigoConta(string Id)
+        public async Task<Conta> CadastrarConta(int codigo, string descricao, TipoConta tipo, bool aceitaLancamento, string? contaMasterId = null)
+        {
+            var conta = new Conta(codigo, descricao, tipo, aceitaLancamento);
+
+            if ((await _contaRepository.GetByCodigoExtenso(conta.CodigoExtenso)) != null)
+            {
+                throw new InvalidOperationException($"Já existe uma conta cadastrada com o código {conta.CodigoExtenso}.");
+            }
+
+            if (contaMasterId != null)
+            {
+                var contaMaster = await _contaRepository.Get(contaMasterId);
+                if (contaMaster == null)
+                    throw new InvalidOperationException("Conta mestre não encontrada.");
+                conta.AddContarMaster(contaMaster);
+            }
+
+            return await _contaRepository.Insert(conta);
+        }
+
+        public async Task<string> ProximoCodigo(string Id)
         {
 
             var conta = await _contaRepository.Get(Id);
@@ -24,7 +44,7 @@ namespace Controle.Financeiro.Domain.PlanoContas
             {
                 if (conta.ContaMaster == null)
                     throw new InvalidOperationException($"Não é possível sugerir um código maior que {Conta.CodigoLimite}.");
-                return await SugerirProximoCodigoConta(conta.ContaMasterId);
+                return await ProximoCodigo(conta.ContaMasterId);
             }
 
             return $"{conta.CodigoExtenso}.{++codigoMaximo}";
