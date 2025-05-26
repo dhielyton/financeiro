@@ -15,11 +15,13 @@ namespace Controle.Financiero.Test.PlanoContas
     public class PlanoContasServiceTest
     {
         private readonly IContaRepository _contaRepository;
-        private readonly FinanceiroDbContext _context;
+        private static FinanceiroDbContext _context;
         private readonly ContaService _contaService;
         public PlanoContasServiceTest()
         {
 
+
+            
             string jsonPath = "PlanoContas/Data/ScenarioSugestaoProximoNumero.json";
             string json = File.ReadAllText(jsonPath);
             List<Conta> contas = JsonSerializer.Deserialize<List<Conta>>(json);
@@ -31,10 +33,16 @@ namespace Controle.Financiero.Test.PlanoContas
             _context = new FinanceiroDbContext(options);
             _contaRepository = new ContaRepository(_context);
             _contaService = new ContaService(_contaRepository);
-            contas.Add(new Conta(2, "Despesas", TipoConta.Despesa, false));
+
+            _context.Contas.RemoveRange(_context.Contas);
+            _context.SaveChanges();
+
             _context.Contas.AddRange(contas);
             _context.SaveChanges();
+
         }
+
+
 
 
         [Fact]
@@ -82,8 +90,7 @@ namespace Controle.Financiero.Test.PlanoContas
         [Fact]
         public async Task DeletarContaComSucesso()
         {
-
-            Func<Task> action = async () => await _contaService.Deletar("b6b6b6b6-6666-6666-6666-666666666666");
+            Func<Task> action = async () => await _contaService.Deletar("e8e8e8e8-8888-8888-8888-888888888888");
             await action.Should().NotThrowAsync();
 
         }

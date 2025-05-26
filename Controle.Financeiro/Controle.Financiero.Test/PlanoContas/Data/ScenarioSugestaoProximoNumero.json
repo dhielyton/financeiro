@@ -52,5 +52,23 @@
     "AceitaLancamento": true,
     "ContaMasterId": "b4b4b4b4-4444-4444-4444-444444444444",
     "CodigoExtenso": "9.9.999.999.999"
+  },
+  {
+    "Id": "d7d7d7d7-7777-7777-7777-777777777777",
+    "Codigo": 2,
+    "Descricao": "Despesas",
+    "Tipo": 1,
+    "AceitaLancamento": false,
+    "ContaMasterId": null,
+    "CodigoExtenso": "2"
+  },
+  {
+    "Id": "e8e8e8e8-8888-8888-8888-888888888888",
+    "Codigo": 4,
+    "Descricao": "Conta Deletar",
+    "Tipo": 1,
+    "AceitaLancamento": false,
+    "ContaMasterId": null,
+    "CodigoExtenso": "4"
   }
 ]
