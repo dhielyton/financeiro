@@ -5,7 +5,6 @@
 /Controle.Financeiro/.vs/Controle.Financeiro
 *.cache
 *.editorconfig
-*.json
 *.props
 *.targets
 *.txt
@@ -20,3 +19,9 @@
 /Controle.Financeiro/Controle.Financeiro.IntegrationTest/bin/Debug/net8.0
 /Controle.Financeiro/Controle.Financeiro.IntegrationTest/obj/Debug/net8.0
 /Controle.Financeiro/.vs/ProjectEvaluation
+/Controle.Financeiro/Controle.Financeiro/obj
+/Controle.Financeiro/Controle.Financeiro.Domain/obj
+/Controle.Financeiro/Controle.Financeiro.Infrastructure/obj
+/Controle.Financeiro/Controle.Financeiro.IntegrationTest/obj
+/Controle.Financeiro/Controle.Financiero.Test/obj
+/.vs
