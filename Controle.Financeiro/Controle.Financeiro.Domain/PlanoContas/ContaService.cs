@@ -15,7 +15,7 @@ namespace Controle.Financeiro.Domain.PlanoContas
             _contaRepository = contaRepository;
         }
 
-        public async Task<Conta> CadastrarConta(int codigo, string descricao, TipoConta tipo, bool aceitaLancamento, string? contaMasterId = null)
+        public async Task<Conta> Cadastrar(int codigo, string descricao, TipoConta tipo, bool aceitaLancamento, string? contaMasterId = null)
         {
             var conta = new Conta(codigo, descricao, tipo, aceitaLancamento);
 
@@ -33,6 +33,27 @@ namespace Controle.Financeiro.Domain.PlanoContas
             }
 
             return await _contaRepository.Insert(conta);
+        }
+
+        public async Task<Conta> ObterContaPorId(string id)
+        {
+            var conta = await _contaRepository.Get(id);
+            if (conta == null)
+                throw new InvalidOperationException("Conta não encontrada.");
+            return conta;
+        }
+
+        public async Task Deletar(string id)
+        {
+            var conta = await _contaRepository.Get(id);
+            if (conta == null)
+                throw new InvalidOperationException("Conta não encontrada.");
+            if ((!conta.AceitaLancamento)&&
+                (await _contaRepository.GetCodigoMaxGrupoConta(conta) > 0))
+            {
+                throw new InvalidOperationException("Não é possível excluir uma conta que possui subcontas.");
+            }
+            await _contaRepository.Delete(conta);
         }
 
         public async Task<string> ProximoCodigo(string Id)

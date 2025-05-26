@@ -48,7 +48,7 @@ namespace Controle.Financiero.Test.PlanoContas
         public async Task CadastrarContaNivel1ComSucesso()
         {
 
-            var result = await _contaService.CadastrarConta(1, "Receitas", TipoConta.Receita, false);
+            var result = await _contaService.Cadastrar(1, "Receitas", TipoConta.Receita, false);
             result.Should().NotBeNull();
         }
 
@@ -56,7 +56,7 @@ namespace Controle.Financiero.Test.PlanoContas
         public async Task CadastrarContaNivel2ComSucesso()
         {
             var contaMaster = await _contaRepository.GetByCodigoExtenso("2");
-            var result = await _contaService.CadastrarConta(1, "Multas", TipoConta.Despesa, true, contaMaster.Id);
+            var result = await _contaService.Cadastrar(1, "Multas", TipoConta.Despesa, true, contaMaster.Id);
             result.Should().NotBeNull();
         }
 
@@ -64,7 +64,7 @@ namespace Controle.Financiero.Test.PlanoContas
         public async Task CadastrarContaComCodigoExtensoExistente()
         {
             var codigo = 2;
-            Func<Task> action = async () => await _contaService.CadastrarConta(codigo, "Multas", TipoConta.Despesa, false);
+            Func<Task> action = async () => await _contaService.Cadastrar(codigo, "Multas", TipoConta.Despesa, false);
             await action.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage($"Já existe uma conta cadastrada com o código {codigo}.");
         }
@@ -72,11 +72,36 @@ namespace Controle.Financiero.Test.PlanoContas
         [Fact]
         public async Task CadastrarContaComContaMasterInexistente()
         {
-            Func<Task> action = async () => await _contaService.CadastrarConta(1, "Multas", TipoConta.Despesa, true, "inexistente-id");
+            Func<Task> action = async () => await _contaService.Cadastrar(1, "Multas", TipoConta.Despesa, true, "inexistente-id");
             await action.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage("Conta mestre não encontrada.");
 
 
+        }
+
+        [Fact]
+        public async Task DeletarContaComSucesso()
+        {
+
+            Func<Task> action = async () => await _contaService.Deletar("b6b6b6b6-6666-6666-6666-666666666666");
+            await action.Should().NotThrowAsync();
+
+        }
+
+        [Fact]
+        public async Task DeletarContaComSubcontas()
+        {
+            Func<Task> action = async () => await _contaService.Deletar("b4b4b4b4-4444-4444-4444-444444444444");
+            await action.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Não é possível excluir uma conta que possui subcontas.");
+        }
+
+        [Fact]
+        public async Task DeletarIdInexistente()
+        {
+            Func<Task> action = async () => await _contaService.Deletar("inexistente-id");
+            await action.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Conta não encontrada.");
         }
     }
 }
