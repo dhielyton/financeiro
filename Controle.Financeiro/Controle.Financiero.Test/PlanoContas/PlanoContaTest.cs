@@ -78,11 +78,7 @@ namespace Controle.Financiero.Test.PlanoContas
             act.Should().Throw<InvalidOperationContaMasterAceitaLancamentoIsTrueException>();
         }
 
-        [Fact]
-        public void SugerirProximoCodigo() 
-        { 
-
-        }
+        
     }
 
     

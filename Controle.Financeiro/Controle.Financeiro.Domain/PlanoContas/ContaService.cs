@@ -14,5 +14,20 @@ namespace Controle.Financeiro.Domain.PlanoContas
         {
             _contaRepository = contaRepository;
         }
+
+        public async Task<string> SugerirProximoCodigoConta(string Id)
+        {
+
+            var conta = await _contaRepository.Get(Id);
+            var codigoMaximo = await _contaRepository.GetCodigoMaxGrupoConta(conta);
+            if (codigoMaximo == Conta.CodigoLimite)
+            {
+                if (conta.ContaMaster == null)
+                    throw new InvalidOperationException($"Não é possível sugerir um código maior que {Conta.CodigoLimite}.");
+                return await SugerirProximoCodigoConta(conta.ContaMasterId);
+            }
+
+            return $"{conta.CodigoExtenso}.{++codigoMaximo}";
+        }
     }
 }

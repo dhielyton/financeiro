@@ -15,6 +15,7 @@ namespace Controle.Financiero.Test.PlanoContas
     {
         private readonly IContaRepository _contaRepository;
         private readonly FinanceiroDbContext _context;
+        private readonly ContaService _contaService;
         public PlanoContasServiceTest()
         {
 
@@ -28,30 +29,17 @@ namespace Controle.Financiero.Test.PlanoContas
 
             _context = new FinanceiroDbContext(options);
             _contaRepository = new ContaRepository(_context);
-           
+            _contaService = new ContaService(_contaRepository);
             _context.Contas.AddRange(contas);
             _context.SaveChanges();
         }
         [Fact]
-        public async Task SugerirProximoCodigoContaComSucesso() 
+        public async Task SugerirProximoCodigoContaComSucesso()
         {
-            var codigoConta = await SugerirProximoCodigoConta("b4b4b4b4-4444-4444-4444-444444444444");
+            var codigoConta = await _contaService.SugerirProximoCodigoConta("b4b4b4b4-4444-4444-4444-444444444444");
             Assert.Equal("9.10", codigoConta);
         }
 
-        public async Task<string> SugerirProximoCodigoConta(string Id)
-        {
-            
-            var conta = await _contaRepository.Get(Id);
-            var codigoMaximo = await _contaRepository.GetCodigoMaxGrupoConta(conta);
-            if(codigoMaximo == Conta.CodigoLimite)
-            {
-                if (conta.ContaMaster == null)
-                    throw new InvalidOperationException($"Não é possível sugerir um código maior que {Conta.CodigoLimite}.");
-                return  await SugerirProximoCodigoConta(conta.ContaMasterId);
-            }
-                
-            return $"{conta.CodigoExtenso}.{++codigoMaximo}";
-        }
+        
     }
 }
