@@ -70,5 +70,10 @@ namespace Controle.Financeiro.Domain.PlanoContas
 
             return $"{conta.CodigoExtenso}.{++codigoMaximo}";
         }
+
+        public async Task<IEnumerable<Conta>> GetAll()
+        {
+            return await _contaRepository.GetAll();
+        }
     }
 }

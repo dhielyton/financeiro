@@ -1,4 +1,5 @@
-﻿using Controle.Financeiro.Domain.PlanoContas;
+﻿using Controle.Financeiro.API.Model;
+using Controle.Financeiro.Domain.PlanoContas;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -9,30 +10,23 @@ namespace Controle.Financeiro.API.Controllers
     [Route("[controller]")]
     public class ContaController : Controller
     {
-        private IContaRepository _contaRepository;
+        private readonly ContaService _contaService;
 
-        public ContaController(IContaRepository contaRepository)
+        public ContaController(ContaService contaService)
         {
-            _contaRepository = contaRepository;
+            _contaService = contaService;
         }
 
         [HttpPost]
-        
+
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Incluir(Model.Conta contaModel)
         {
             try
             {
-                if(contaModel == null)
-                    return BadRequest("Conta não informada.");
-                var conta = new Conta(contaModel.Codigo, contaModel.Descricao, contaModel.TipoConta, contaModel.AceitaLancamento);
-                if (contaModel.GrupoMasterId != null)
-                {
-                    var contaMaster = await _contaRepository.Get(contaModel.GrupoMasterId);
-                    conta.AddContarMaster(contaMaster);
-                }
-               
-                conta = await _contaRepository.Insert(conta);
+
+
+                var conta = await _contaService.Cadastrar(contaModel.Codigo, contaModel.Descricao, contaModel.TipoConta, contaModel.AceitaLancamento, contaModel.ContaMasterId);
                 return Ok(conta);
             }
             catch (Exception)
@@ -51,8 +45,7 @@ namespace Controle.Financeiro.API.Controllers
         {
             try
             {
-                var conta = await _contaRepository.Get(id);
-                await _contaRepository.Delete(conta);
+                _contaService.Deletar(id);
                 return Ok();
             }
             catch (Exception)
@@ -69,7 +62,7 @@ namespace Controle.Financeiro.API.Controllers
         {
             try
             {
-                var contas = await _contaRepository.GetAll();
+                var contas = await _contaService.GetAll();
                 return Ok(Model.ContaItem.FromDomainList(contas));
             }
             catch (Exception)
@@ -78,16 +71,13 @@ namespace Controle.Financeiro.API.Controllers
             }
         }
         [HttpGet]
+        [Route("/proximocodigo")]
         public async Task<IActionResult> GetProximoCodigo(string grupoMasterId)
         {
             try
             {
-                if (string.IsNullOrEmpty(grupoMasterId))
-                    return BadRequest("Grupo master não informado.");
-                var contaMaster = await _contaRepository.Get(grupoMasterId);
-                _contaRepository.GetCodigoMaxGrupoConta(contaMaster);
-                
-                return Ok(Model.ContaItem.FromDomain(conta));
+                var codigo = await _contaService.ProximoCodigo(grupoMasterId);
+                return Ok(new ProximoCodigoResult(codigo));
             }
             catch (Exception)
             {

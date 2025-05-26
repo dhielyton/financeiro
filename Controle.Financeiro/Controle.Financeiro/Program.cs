@@ -25,6 +25,7 @@ builder.Services.AddDbContext<FinanceiroDbContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionString:DefaultConnection"]));
 
 builder.Services.AddScoped<IContaRepository, ContaRepository>();
+builder.Services.AddScoped<ContaService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
