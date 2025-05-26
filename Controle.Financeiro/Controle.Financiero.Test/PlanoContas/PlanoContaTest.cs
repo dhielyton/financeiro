@@ -77,6 +77,12 @@ namespace Controle.Financiero.Test.PlanoContas
             Action act = () => subconta.AddContarMaster(conta);
             act.Should().Throw<InvalidOperationContaMasterAceitaLancamentoIsTrueException>();
         }
+
+        [Fact]
+        public void SugerirProximoCodigo() 
+        { 
+
+        }
     }
 
     

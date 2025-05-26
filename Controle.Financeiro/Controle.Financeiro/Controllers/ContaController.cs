@@ -17,7 +17,7 @@ namespace Controle.Financeiro.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Conta),(int) HttpStatusCode.OK)]
+        
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Incluir(Model.Conta contaModel)
         {
@@ -64,13 +64,30 @@ namespace Controle.Financeiro.API.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Model.ContaItem>), (int)HttpStatusCode.OK)]
+        [Route("/planodecontas")]
         public async Task<IActionResult> GetAll()
         {
             try
             {
                 var contas = await _contaRepository.GetAll();
                 return Ok(Model.ContaItem.FromDomainList(contas));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetProximoCodigo(string grupoMasterId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(grupoMasterId))
+                    return BadRequest("Grupo master não informado.");
+                var contaMaster = await _contaRepository.Get(grupoMasterId);
+                _contaRepository.GetCodigoMaxGrupoConta(contaMaster);
+                
+                return Ok(Model.ContaItem.FromDomain(conta));
             }
             catch (Exception)
             {

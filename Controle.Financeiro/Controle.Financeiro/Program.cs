@@ -30,6 +30,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<FinanceiroDbContext>();
+        context.Database.EnsureCreated();
+    }
     app.UseSwagger();
     app.UseSwaggerUI();
 }

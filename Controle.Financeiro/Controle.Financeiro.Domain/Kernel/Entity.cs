@@ -8,7 +8,7 @@ namespace Controle.Financeiro.Domain.Kernel
 {
     public abstract class Entity
     {
-        public string Id { get; private set; }
+        public string Id { get;  set; }
 
         public void GenerateId()
         {
