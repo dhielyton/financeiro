@@ -1,0 +1,56 @@
+[
+  {
+    "Id": "b1a1a1a1-1111-1111-1111-111111111111",
+    "Codigo": 9,
+    "Descricao": "Conta 1",
+    "Tipo": 0,
+    "AceitaLancamento": false,
+    "ContaMasterId": null,
+    "CodigoExtenso": "9"
+  },
+  {
+    "Id": "b2b2b2b2-2222-2222-2222-222222222222",
+    "Codigo": 9,
+    "Descricao": "Conta 2",
+    "Tipo": 0,
+    "AceitaLancamento": false,
+    "ContaMasterId": "b1a1a1a1-1111-1111-1111-111111111111",
+    "CodigoExtenso": "9.9"
+  },
+  {
+    "Id": "b3b3b3b3-3333-3333-3333-333333333333",
+    "Codigo": 999,
+    "Descricao": "Conta 3",
+    "Tipo": 0,
+    "AceitaLancamento": false,
+    "ContaMasterId": "b2b2b2b2-2222-2222-2222-222222222222",
+    "CodigoExtenso": "9.9.999"
+  },
+  {
+    "Id": "b4b4b4b4-4444-4444-4444-444444444444",
+    "Codigo": 999,
+    "Descricao": "Conta 4",
+    "Tipo": 0,
+    "AceitaLancamento": false,
+    "ContaMasterId": "b3b3b3b3-3333-3333-3333-333333333333",
+    "CodigoExtenso": "9.9.999.999"
+  },
+  {
+    "Id": "b5b5b5b5-5555-5555-5555-555555555555",
+    "Codigo": 998,
+    "Descricao": "Conta 5",
+    "Tipo": 0,
+    "AceitaLancamento": true,
+    "ContaMasterId": "b4b4b4b4-4444-4444-4444-444444444444",
+    "CodigoExtenso": "9.9.999.999.998"
+  },
+  {
+    "Id": "b6b6b6b6-6666-6666-6666-666666666666",
+    "Codigo": 999,
+    "Descricao": "Conta 6",
+    "Tipo": 0,
+    "AceitaLancamento": true,
+    "ContaMasterId": "b4b4b4b4-4444-4444-4444-444444444444",
+    "CodigoExtenso": "9.9.999.999.999"
+  }
+]
