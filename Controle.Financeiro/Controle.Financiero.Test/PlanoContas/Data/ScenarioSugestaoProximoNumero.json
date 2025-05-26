@@ -70,5 +70,14 @@
     "AceitaLancamento": false,
     "ContaMasterId": null,
     "CodigoExtenso": "4"
+  },
+  {
+    "Id": "f9f9f9f9-9999-9999-9999-999999999999",
+    "Codigo": 10,
+    "Descricao": "Conta",
+    "Tipo": 1,
+    "AceitaLancamento": true,
+    "ContaMasterId": null,
+    "CodigoExtenso": "10"
   }
 ]

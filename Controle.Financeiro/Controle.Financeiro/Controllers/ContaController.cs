@@ -38,7 +38,7 @@ namespace Controle.Financeiro.API.Controllers
 
         }
         [HttpDelete]
-        [Route("/id")]
+        [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(string id)
@@ -51,6 +51,30 @@ namespace Controle.Financeiro.API.Controllers
             catch (Exception)
             {
 
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Atualizar(string id, [FromBody] Model.Conta contaModel)
+        {
+            try
+            {
+                var conta = await _contaService.Atualizar(
+                    id,
+                    contaModel.Codigo,
+                    contaModel.Descricao,
+                    contaModel.TipoConta,
+                    contaModel.AceitaLancamento,
+                    contaModel.ContaMasterId
+                );
+                return Ok(conta);
+            }
+            catch (Exception)
+            {
                 return BadRequest();
             }
         }

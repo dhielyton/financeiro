@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Controle.Financeiro.Domain.PlanoContas
 {
@@ -19,21 +20,54 @@ namespace Controle.Financeiro.Domain.PlanoContas
         {
             var conta = new Conta(codigo, descricao, tipo, aceitaLancamento);
 
-            if ((await _contaRepository.GetByCodigoExtenso(conta.CodigoExtenso)) != null)
-            {
-                throw new InvalidOperationException($"Já existe uma conta cadastrada com o código {conta.CodigoExtenso}.");
-            }
+            await verificaCodigoExtensoJaCadastrado(conta.CodigoExtenso);
 
             if (contaMasterId != null)
             {
-                var contaMaster = await _contaRepository.Get(contaMasterId);
-                if (contaMaster == null)
-                    throw new InvalidOperationException("Conta mestre não encontrada.");
+                var contaMaster = await ObterContaPorId(contaMasterId);
                 conta.AddContarMaster(contaMaster);
             }
 
             return await _contaRepository.Insert(conta);
         }
+
+        public async Task<Conta> Atualizar(string id, int codigo, string descricao, TipoConta tipo, bool aceitaLancamento, string? contaMasterId = null)
+        {
+            var conta = await _contaRepository.Get(id);
+            if (conta == null)
+                throw new InvalidOperationException("Conta não encontrada.");
+
+            conta.Codigo = codigo;
+            conta.Descricao = descricao;
+            conta.Tipo = tipo;
+            conta.AceitaLancamento = aceitaLancamento;
+
+            if (contaMasterId != null)
+            {
+                var contaMaster = await ObterContaPorId(contaMasterId);
+                conta.AddContarMaster(contaMaster);
+            }
+            else
+            {
+                conta.ContaMasterId = null;
+            }
+
+            conta.GerarCodigoExtenso();
+
+            await verificaCodigoExtensoJaCadastrado(conta.CodigoExtenso, id);
+
+            return await _contaRepository.Update(conta);
+        }
+
+        private async Task verificaCodigoExtensoJaCadastrado(string codigo, string id = null)
+        {
+            var conta = await _contaRepository.GetByCodigoExtenso(codigo);
+            if ((conta != null) && (conta.Id != id))
+            {
+                throw new InvalidOperationException($"Já existe uma conta cadastrada com o código {codigo}.");
+            }
+        }
+
 
         public async Task<Conta> ObterContaPorId(string id)
         {
@@ -48,7 +82,7 @@ namespace Controle.Financeiro.Domain.PlanoContas
             var conta = await _contaRepository.Get(id);
             if (conta == null)
                 throw new InvalidOperationException("Conta não encontrada.");
-            if ((!conta.AceitaLancamento)&&
+            if ((!conta.AceitaLancamento) &&
                 (await _contaRepository.GetCodigoMaxGrupoConta(conta) > 0))
             {
                 throw new InvalidOperationException("Não é possível excluir uma conta que possui subcontas.");

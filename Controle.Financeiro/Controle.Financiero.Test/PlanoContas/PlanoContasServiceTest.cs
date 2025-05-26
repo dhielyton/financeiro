@@ -82,7 +82,7 @@ namespace Controle.Financiero.Test.PlanoContas
         {
             Func<Task> action = async () => await _contaService.Cadastrar(1, "Multas", TipoConta.Despesa, true, "inexistente-id");
             await action.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Conta mestre não encontrada.");
+                .WithMessage("Conta não encontrada.");
 
 
         }
@@ -110,5 +110,25 @@ namespace Controle.Financiero.Test.PlanoContas
             await action.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage("Conta não encontrada.");
         }
+        [Fact]
+        public async Task AtualizarContaComSucesso()
+        {
+            var conta = await _contaRepository.GetByCodigoExtenso("10");
+            var result = await _contaService.Atualizar(conta.Id, conta.Codigo, "Taxa Condominial Atualizada", conta.Tipo, conta.AceitaLancamento, conta.ContaMasterId);
+            result.Should().NotBeNull();
+            result = await _contaRepository.GetByCodigoExtenso(conta.CodigoExtenso);
+            result.Descricao.Should().Be("Taxa Condominial Atualizada");
+        }
+        [Fact]
+        public async Task AtualizarContaComCodigoExtensoExistente()
+        {
+            var conta = await _contaRepository.GetByCodigoExtenso("10");
+            var novoCodigo = 2; // Código que já existe
+            Func<Task> action = async () => await _contaService.Atualizar(conta.Id, novoCodigo, "Taxa Condominial Atualizada", conta.Tipo, conta.AceitaLancamento, conta.ContaMasterId);
+            await action.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage($"Já existe uma conta cadastrada com o código {novoCodigo}.");
+        }
     }
+
+
 }
