@@ -24,7 +24,7 @@ namespace Controle.Financiero.Test.PlanoContas
             List<Conta> contas = JsonSerializer.Deserialize<List<Conta>>(json);
 
             var options = new DbContextOptionsBuilder<FinanceiroDbContext>()
-                        .UseInMemoryDatabase("TestDb") // ou UseSqlServer("sua_connection_string")
+                        .UseInMemoryDatabase("TestDb") 
                         .Options;
 
             _context = new FinanceiroDbContext(options);
