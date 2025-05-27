@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="PlanoContas\Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="PlanoContas\Data\ScenarioSugestaoProximoNumero.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

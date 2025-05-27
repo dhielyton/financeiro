@@ -1,6 +1,7 @@
 ﻿using Controle.Financeiro.Domain.PlanoContas;
 using Controle.Financeiro.Infrastructure.Context;
 using Controle.Financeiro.Infrastructure.Repositories;
+using Controle.Financiero.Test.PlanoContas.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,7 +25,7 @@ namespace Controle.Financiero.Test.PlanoContas
             
             string jsonPath = "PlanoContas/Data/ScenarioSugestaoProximoNumero.json";
             string json = File.ReadAllText(jsonPath);
-            List<Conta> contas = JsonSerializer.Deserialize<List<Conta>>(json);
+            List<ContaItem> contas = JsonSerializer.Deserialize<List<ContaItem>>(json).OrderBy(x => x.CodigoExtenso).ToList();
 
             var options = new DbContextOptionsBuilder<FinanceiroDbContext>()
                         .UseInMemoryDatabase("TestDb")
@@ -37,11 +38,13 @@ namespace Controle.Financiero.Test.PlanoContas
             _context.Contas.RemoveRange(_context.Contas);
             _context.SaveChanges();
 
-            _context.Contas.AddRange(contas);
-            _context.SaveChanges();
-
+            foreach (var contaItem in contas)
+            {
+               _contaService.Cadastrar(contaItem.Codigo, contaItem.Descricao, (TipoConta)contaItem.Tipo, contaItem.AceitaLancamento, contaItem.ContaMasterId, contaItem.Id).GetAwaiter().GetResult();
+            }
+           
         }
-
+        
 
 
 
@@ -127,6 +130,15 @@ namespace Controle.Financiero.Test.PlanoContas
             Func<Task> action = async () => await _contaService.Atualizar(conta.Id, novoCodigo, "Taxa Condominial Atualizada", conta.Tipo, conta.AceitaLancamento, conta.ContaMasterId);
             await action.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage($"Já existe uma conta cadastrada com o código {novoCodigo}.");
+        }
+
+        [Fact]
+        public async Task AtualizarContaComSubcontas()
+        {
+            var conta = await _contaRepository.GetByCodigoExtenso("9.9.999");
+            Func<Task> action = async () => await _contaService.Atualizar(conta.Id, 9, "Com Pessoal Atualizada", conta.Tipo, conta.AceitaLancamento, conta.ContaMasterId);
+            await action.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Não é possível alterar o código de uma conta que possui subcontas.");
         }
     }
 

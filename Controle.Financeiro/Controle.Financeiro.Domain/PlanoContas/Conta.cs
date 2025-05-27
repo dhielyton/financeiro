@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace Controle.Financeiro.Domain.PlanoContas
 {
-    public class Conta: Entity
+    public class Conta : Entity
     {
         public const int CodigoLimite = 999;
         public Conta(int codigo, string descricao, TipoConta tipo, bool aceitaLancamento)
         {
-            if(codigo <= 0 || codigo > CodigoLimite)
+            if (codigo <= 0 || codigo > CodigoLimite)
                 throw new ArgumentOutOfRangeException(nameof(codigo), "O código deve ser maior que 0 e menor que 999.");
-
-            GenerateId();
+            if (string.IsNullOrEmpty(Id))
+                GenerateId();
             Descricao = descricao;
             Codigo = codigo;
             Tipo = tipo;

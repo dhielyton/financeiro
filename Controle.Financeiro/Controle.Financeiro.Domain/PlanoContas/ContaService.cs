@@ -16,11 +16,12 @@ namespace Controle.Financeiro.Domain.PlanoContas
             _contaRepository = contaRepository;
         }
 
-        public async Task<Conta> Cadastrar(int codigo, string descricao, TipoConta tipo, bool aceitaLancamento, string? contaMasterId = null)
+        public async Task<Conta> Cadastrar(int codigo, string descricao, TipoConta tipo, bool aceitaLancamento, string? contaMasterId = null, string id = null)
         {
             var conta = new Conta(codigo, descricao, tipo, aceitaLancamento);
 
-            await verificaCodigoExtensoJaCadastrado(conta.CodigoExtenso);
+            if (!string.IsNullOrEmpty(id))
+                conta.Id = id;
 
             if (contaMasterId != null)
             {
@@ -28,6 +29,7 @@ namespace Controle.Financeiro.Domain.PlanoContas
                 conta.AddContarMaster(contaMaster);
             }
 
+            await verificaCodigoExtensoJaCadastrado(conta.CodigoExtenso);
             return await _contaRepository.Insert(conta);
         }
 
@@ -36,7 +38,11 @@ namespace Controle.Financeiro.Domain.PlanoContas
             var conta = await _contaRepository.Get(id);
             if (conta == null)
                 throw new InvalidOperationException("Conta não encontrada.");
-
+            if (conta.Codigo != codigo)
+            {
+                if (await possuiSubConta(conta))
+                    throw new InvalidOperationException("Não é possível alterar o código de uma conta que possui subcontas.");
+            }
             conta.Codigo = codigo;
             conta.Descricao = descricao;
             conta.Tipo = tipo;
@@ -68,6 +74,18 @@ namespace Controle.Financeiro.Domain.PlanoContas
             }
         }
 
+        private async Task<bool> possuiSubConta(Conta conta)
+        {
+            if (conta.AceitaLancamento)
+                return false;
+            var codigoMaximo = await _contaRepository.GetCodigoMaxGrupoConta(conta);
+            if (codigoMaximo > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         public async Task<Conta> ObterContaPorId(string id)
         {
@@ -82,11 +100,10 @@ namespace Controle.Financeiro.Domain.PlanoContas
             var conta = await _contaRepository.Get(id);
             if (conta == null)
                 throw new InvalidOperationException("Conta não encontrada.");
-            if ((!conta.AceitaLancamento) &&
-                (await _contaRepository.GetCodigoMaxGrupoConta(conta) > 0))
-            {
+
+            if (await possuiSubConta(conta))
                 throw new InvalidOperationException("Não é possível excluir uma conta que possui subcontas.");
-            }
+
             await _contaRepository.Delete(conta);
         }
 
