@@ -20,13 +20,6 @@ namespace Controle.Financiero.Test.PlanoContas
         private readonly ContaService _contaService;
         public PlanoContasServiceTest()
         {
-
-
-            
-            string jsonPath = "PlanoContas/Data/ScenarioSugestaoProximoNumero.json";
-            string json = File.ReadAllText(jsonPath);
-            List<ContaItem> contas = JsonSerializer.Deserialize<List<ContaItem>>(json).OrderBy(x => x.CodigoExtenso).ToList();
-
             var options = new DbContextOptionsBuilder<FinanceiroDbContext>()
                         .UseInMemoryDatabase("TestDb")
                         .Options;
@@ -38,13 +31,20 @@ namespace Controle.Financiero.Test.PlanoContas
             _context.Contas.RemoveRange(_context.Contas);
             _context.SaveChanges();
 
-            foreach (var contaItem in contas)
-            {
-               _contaService.Cadastrar(contaItem.Codigo, contaItem.Descricao, (TipoConta)contaItem.Tipo, contaItem.AceitaLancamento, contaItem.ContaMasterId, contaItem.Id).GetAwaiter().GetResult();
-            }
-           
+            SeedContas().GetAwaiter().GetResult();
+
+
+
         }
-        
+
+        public async Task SeedContas()
+        {
+            foreach (var contaItem in GerarContasUtil.Deserializar("PlanoContas/Data/ScenarioSugestaoProximoNumero.json"))
+            {
+                await _contaService.Cadastrar(contaItem.Codigo, contaItem.Descricao, (TipoConta)contaItem.Tipo, contaItem.AceitaLancamento, contaItem.ContaMasterId, contaItem.Id);
+            }
+        }
+
 
 
 
