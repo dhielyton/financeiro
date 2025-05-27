@@ -26,7 +26,7 @@ namespace Controle.Financeiro.Infrastructure.Repositories
             return entity;
         }
 
-        public Task<TEntity> Get(string Id)
+        public virtual Task<TEntity> Get(string Id)
         {
             return _dbSet.Where(x => x.Id == Id).FirstOrDefaultAsync();
         }

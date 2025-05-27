@@ -24,6 +24,10 @@ namespace Controle.Financeiro.Infrastructure.Repositories
         {
             return  await _dbSet.Include(x => x.ContaMaster).Where(x => x.CodigoExtenso == codigoExtenso).FirstOrDefaultAsync();
         }
+        public override Task<Conta> Get(string Id)
+        {
+            return _dbSet.Include(x => x.ContaMaster).Where(x => x.Id == Id).FirstOrDefaultAsync();
+        }
 
         public async Task<int> GetCodigoMaxGrupoConta(Conta grupoConta)
         {
